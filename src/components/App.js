@@ -10,6 +10,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({});
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -28,6 +29,12 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setisEditAvatarPopupOpen(false);
     setIsOpen(false);
+    setSelectedCard(false);
+  }
+
+  const handleCardClick = (selectedCard) => {
+    setIsOpen(true);
+    setSelectedCard(selectedCard);
   }
 
   return (
@@ -37,6 +44,7 @@ function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
       />
       <PopupWithForm
         name="profile-edit"
@@ -78,43 +86,14 @@ function App() {
           <span className="avatar-input-error form__item-error"></span>
         </fieldset>
       </PopupWithForm>
+      <ImagePopup
+        card={selectedCard}
+        isOpen={isOpen}
+        onClose={closeAllPopups}
+      />
       <Footer />
     
-
-    <div className="popup popup_type_delete-confirm">
-      <div className="popup__container popup__content">
-        <button className="popup__close popup__close-cards"></button>
-        <form className="form form-delete" name="delete-card" noValidate>
-          <h2 className="form__title">Вы уверены?</h2>
-          <input type="hidden" name="input-id" value="" />
-          <button type="submit" className="form__submit form__submit_delete">Да</button>
-        </form>
-      </div>
     </div>
-
-    <div className="popup popup_type_open-card">
-      <div className="popup__card-container popup__content">
-        <button className="popup__close popup__close_image" type="button"></button>
-        <img className="popup__image" src="#" alt="" />
-        <h2 className="popup__image-title"></h2>
-      </div>
-    </div>
-
-    <template id="initial-template">
-      <li className="element element_checked">
-        <img className="element__photo" src="#" alt="" />
-        <button className="element__delete" type="button"></button>
-        <div className="element__name-container">
-          <h2 className="element__name"></h2>
-          <div className="element__like-container">
-            <button className="element__button" type="button"></button>
-            <span className="element__like-count"></span>
-          </div>
-        </div>
-      </li>
-    </template>
-    
-  </div>
   );
 }
 
