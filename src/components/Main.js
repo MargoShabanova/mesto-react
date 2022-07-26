@@ -1,37 +1,33 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { api } from '../utils/api';
 
 export default function Main({onEditProfile, onAddPlace, onEditAvatar}) {
+  const [userName, setUserName] = useState('User name');
+  const [userDescription, setUserDescription] = useState('About user');
+  const [userAvatar, setUserAvatar] = useState('');
 
-  // const handleEditAvatarClick = () => {
-  //   document.querySelector('.profile__avatar-button').addEventListener('click', () => {
-  //     console.log('я нажался')
-  //     //document.querySelector('.popup_type_avatar-edit').classList.add('popup_opened');
-  //   })
-  // }
-
-  // const handleEditProfileClick = () => {
-  //   document.querySelector('.profile__edit-button').addEventListener('click', () => {
-  //     document.querySelector('.popup_type_profile-edit').classList.add('popup_opened');
-  //   })
-  // }
-
-  // const handleAddPlaceClick = () => {
-  //   document.querySelector('.profile__add-button').addEventListener('click', () => {
-  //     document.querySelector('.popup_type_add-card').classList.add('popup_opened');
-  //   })
-  // }
+  useEffect(() => {
+    api
+      .getProfile()
+      .then((res) => {
+        setUserName(res.name);
+        setUserDescription(res.about);
+        setUserAvatar(res.avatar);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <main>
   		<section className="profile">
         <div className="profile__container">
   			  <div className="profile__avatar-button" onClick={onEditAvatar}>
-            <img className="profile__avatar" src="./images/image.jpg" alt="фото пользователя" />
+            <img className="profile__avatar" src={userAvatar} alt="фото пользователя" />
           </div>
   			  <div className="profile__info">
-  				  <h1 className="profile__name">User name</h1>
+  				  <h1 className="profile__name">{userName}</h1>
   				  <button className="profile__edit-button" type="button" onClick={onEditProfile}></button>
-  				  <p className="profile__metier">About user</p>
+  				  <p className="profile__metier">{userDescription}</p>
   			  </div>
         </div>
   			<button className="profile__add-button" type="button" onClick={onAddPlace}></button>

@@ -3,22 +3,31 @@ import Footer from './Footer';
 import Header from './Header';
 import Main from './Main';
 import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
 
 function App() {
-  const [isEditProfilePopup, setIsEditProfilePopup] = React.useState(false);
-  const [isAddCardPopup, setIsAddCardPopup] = React.useState(false);
-  const [isEditAvatarPopup, setIsEditAvatarPopup] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const handleEditProfileClick = () => {
-    setIsEditProfilePopup(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   const handleAddPlaceClick = () => {
-    setIsAddCardPopup(true);
+    setIsAddPlacePopupOpen(true);
   }
 
   const handleEditAvatarClick = () => {
-    setIsEditAvatarPopup(true);
+    setisEditAvatarPopupOpen(true);
+  }
+
+  const closeAllPopups = () => {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setisEditAvatarPopupOpen(false);
+    setIsOpen(false);
   }
 
   return (
@@ -33,8 +42,8 @@ function App() {
         name="profile-edit"
         title="Редактировать профиль"
         buttonText="Сохранить"
-        isOpen={isEditProfilePopup}
-        // onClose={closeAllPopups}
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
       >
         <fieldset className="form__container">
           <input id="name-input" name="name" type="text" className="form__item form__item_type_name" placeholder="Имя" required minLength="2" maxLength="40" />
@@ -47,7 +56,8 @@ function App() {
         name="add-card"
         title="Новое место"
         buttonText="Создать"
-        isOpen={isAddCardPopup}
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
       >
         <fieldset className="form__container">
           <input id="place-name-input" name="name" type="text" className="form__item form__item_place-name" placeholder="Название" required minLength="2" maxLength="30" />
@@ -60,7 +70,8 @@ function App() {
         name="avatar-edit"
         title="Обновить аватар"
         buttonText="Сохранить"
-        isOpen={isEditAvatarPopup}
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
       >
         <fieldset className="form__container">
           <input id="avatar-input" name="avatar-url" type="url" className="form__item form__item_avatar-link" placeholder="Ссылка на картинку" required />
@@ -80,20 +91,6 @@ function App() {
         </form>
       </div>
     </div>
-
-    {/* <div className="popup popup_type_avatar-edit">
-      <div className="popup__container popup__content">
-        <button className="popup__close popup__close-avatar-edit"></button>
-        <form className="form form_type_avatar-edit" name="avatar" noValidate>
-          <h2 className="form__title">Обновить аватар</h2>
-          <fieldset className="form__container">
-            <input id="avatar-input" name="avatar-url" type="url" className="form__item form__item_avatar-link" placeholder="Ссылка на картинку" required />
-            <span className="avatar-input-error form__item-error"></span>
-          </fieldset>
-          <button type="submit" className="form__submit form__submit_edit">Сохранить</button>
-        </form>
-      </div>
-    </div> */}
 
     <div className="popup popup_type_open-card">
       <div className="popup__card-container popup__content">
