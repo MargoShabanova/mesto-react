@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import { api } from '../utils/api';
 import Card from './Card';
 
@@ -47,9 +47,6 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
             <Card
               key={item._id}
               card={item}
-              name={item.name}
-              link={item.link}
-              likes={item.likes.length}
               onCardClick={onCardClick}
             />
           ))}
