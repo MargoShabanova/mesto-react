@@ -81,6 +81,10 @@ class Api {
         .catch(console.log)
     }
 
+    changeLikeCardStatus(id, state) {
+        return state ? this.addLike(id) : this.deleteLike(id)
+    }
+
     editAvatar(avatar) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: "PATCH",

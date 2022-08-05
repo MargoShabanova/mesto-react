@@ -17,3 +17,11 @@
     opacity: 0.6;
     transition: 0.4s;
 }
+
+.element__delete_visible {
+    display: block;
+}
+
+.element__delete_hidden {
+    display: none;
+}

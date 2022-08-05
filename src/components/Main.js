@@ -7,6 +7,23 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
   const [cards, setCards] = useState([]);
   const currentUser = useContext(CurrentUserContext);
 
+  function handleCardLike(card) {
+    const isLked = card.likes.some(i => i._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, !isLked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      });
+  };
+
+  function handleCardDelete(card) {
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+      });
+  }
+
   useEffect(() => {
     api
       .getInitialCards()
@@ -39,6 +56,8 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
               key={item._id}
               card={item}
               onCardClick={onCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             />
           ))}
         </ul>

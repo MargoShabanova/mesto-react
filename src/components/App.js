@@ -19,7 +19,7 @@ function App() {
     api
       .getProfile()
       .then((res) => {
-        setCurrentUser(res.name, res.about, res.avatar);
+        setCurrentUser(res);
       })
       .catch((err) => console.log(err));
   }, []);
