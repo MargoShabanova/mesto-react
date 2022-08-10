@@ -37,7 +37,7 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
     <main>
   		<section className="profile">
         <div className="profile__container">
-  			  <div className="profile__avatar-button" onClick={onEditAvatar}>
+  			  <div className="profile__avatar-button" type="button" onClick={onEditAvatar}>
             <img className="profile__avatar" src={currentUser.avatar} alt="фото пользователя" />
           </div>
   			  <div className="profile__info">
