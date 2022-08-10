@@ -6,13 +6,16 @@ import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import DeleteConfirmPopup from "./DeleteConfirmPopup";
 import { api } from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isDeleteConfirmPopupOpen, setIsDeleteConfirmPopupOpen] = useState(false);
+  const [selectedForDeletionCard, setSelectedForDeletionCard] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState("");
@@ -42,15 +45,21 @@ function App() {
   };
 
   const handleEditAvatarClick = () => {
-    setisEditAvatarPopupOpen(true);
+    setIsEditAvatarPopupOpen(true);
   };
+
+  const handleDeleteCardClick = (card) => {
+    setIsDeleteConfirmPopupOpen(true);
+    setSelectedForDeletionCard(card);
+  }
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setisEditAvatarPopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
     setIsOpen(false);
     setSelectedCard(false);
+    setIsDeleteConfirmPopupOpen(false);
   };
 
   const handleCardClick = (selectedCard) => {
@@ -93,6 +102,7 @@ function App() {
       .deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
+        closeAllPopups();
       })
       .catch((err) => console.log(err));
   };
@@ -117,7 +127,7 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleDeleteCardClick}
           cards={cards}
         />
         <EditProfilePopup
@@ -139,6 +149,12 @@ function App() {
           card={selectedCard}
           isOpen={isOpen}
           onClose={closeAllPopups}
+        />
+        <DeleteConfirmPopup
+          isOpen={isDeleteConfirmPopupOpen}
+          onClose={closeAllPopups}
+          onDeleteCard={handleCardDelete}
+          card={selectedForDeletionCard}
         />
         <Footer />
       </div>
