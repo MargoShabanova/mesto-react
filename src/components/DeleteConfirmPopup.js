@@ -15,8 +15,8 @@ export default function DeleteConfirmPopup({ isOpen, onClose, onDeleteCard, card
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-    >
-      <input type="hidden" name="input-id" value=""></input>
-    </PopupWithForm>
+    />
+      // <input type="hidden" name="input-id" value=""></input>
+    // </PopupWithForm>
   );
 }

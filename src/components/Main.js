@@ -13,6 +13,17 @@ export default function Main({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
+  const cardsElements = cards.map((item) => (
+    <li key={item._id}>
+      <Card
+        card={item}
+        onCardClick={onCardClick}
+        onCardLike={onCardLike}
+        onCardDelete={onCardDelete}
+      />
+    </li>
+  ));
+
   return (
     <main>
       <section className="profile">
@@ -46,17 +57,7 @@ export default function Main({
       </section>
 
       <section className="elements">
-        <ul className="elements__list">
-          {cards.map((item) => (
-            <Card
-              key={item._id}
-              card={item}
-              onCardClick={onCardClick}
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
-            />
-          ))}
-        </ul>
+        <ul className="elements__list">{cardsElements}</ul>
       </section>
     </main>
   );

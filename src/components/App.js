@@ -14,24 +14,17 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isDeleteConfirmPopupOpen, setIsDeleteConfirmPopupOpen] = useState(false);
-  const [selectedForDeletionCard, setSelectedForDeletionCard] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedForDeletionCard, setSelectedForDeletionCard] = useState(null);
+  const [isImageOpen, setIsImageOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api
-      .getProfile()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => console.log(err));
-      api
-      .getInitialCards()
-      .then((res) => {
-        setCards(res);
+    Promise.all([api.getProfile(), api.getInitialCards()])
+      .then(([currentUser, initialCards]) => {
+        setCurrentUser(currentUser);
+        setCards(initialCards);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -49,21 +42,20 @@ function App() {
   };
 
   const handleDeleteCardClick = (card) => {
-    setIsDeleteConfirmPopupOpen(true);
     setSelectedForDeletionCard(card);
-  }
+  };
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setIsOpen(false);
-    setSelectedCard(false);
-    setIsDeleteConfirmPopupOpen(false);
+    setIsImageOpen(false);
+    setSelectedCard({});
+    setSelectedForDeletionCard(null);
   };
 
   const handleCardClick = (selectedCard) => {
-    setIsOpen(true);
+    setIsImageOpen(true);
     setSelectedCard(selectedCard);
   };
 
@@ -88,11 +80,13 @@ function App() {
   };
 
   const handleCardLike = (card) => {
-    const isLked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, !isLked)
+      .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
       })
       .catch((err) => console.log(err));
   };
@@ -115,7 +109,7 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -147,11 +141,11 @@ function App() {
         />
         <ImagePopup
           card={selectedCard}
-          isOpen={isOpen}
+          isOpen={isImageOpen}
           onClose={closeAllPopups}
         />
         <DeleteConfirmPopup
-          isOpen={isDeleteConfirmPopupOpen}
+          isOpen={selectedForDeletionCard !== null}
           onClose={closeAllPopups}
           onDeleteCard={handleCardDelete}
           card={selectedForDeletionCard}
